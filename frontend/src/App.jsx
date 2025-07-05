@@ -1,21 +1,26 @@
-import ProductCard from "./components/ProductCard";
+import { Suspense } from "react";
+import ProductGrid from "./components/ProductGrid";
+import ProductGridSkeleton from "./components/UI/ProductGridSkeleton";
 
 
 function App() {
   return (
-    <>
-      <ProductCard product={{
-    id: 1,
-    name: "Engagement Ring 1",
-    popularityScore: 0.85,
-    weight: 2.1,
-    images: {
-      yellow: "https://cdn.shopify.com/s/files/1/0484/1429/4167/files/EG085-100P-Y.jpg?v=1696588368",
-      rose: "https://cdn.shopify.com/s/files/1/0484/1429/4167/files/EG085-100P-R.jpg?v=1696588406",
-      white: "https://cdn.shopify.com/s/files/1/0484/1429/4167/files/EG085-100P-W.jpg?v=1696588402"
-    }
-  }} />
-    </>
+   <main className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-light text-gray-800 mb-2" style={{ fontFamily: "Avenir, sans-serif" }}>
+            Engagement Rings Collection
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Discover our exquisite collection of engagement rings with real-time pricing based on current gold market rates.
+          </p>
+        </div>
+        
+        <Suspense fallback={<ProductGridSkeleton />}>
+          <ProductGrid />
+        </Suspense>
+      </div>
+    </main>
   );
 }
 
