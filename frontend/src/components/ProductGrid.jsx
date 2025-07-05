@@ -3,7 +3,7 @@ import ProductCard from "./ProductCard"
 import ProductGridSkeleton from "./UI/ProductGridSkeleton"
 import ProductFilter from "./ProductFilter"
 
-const API_BASE_URL = "http://localhost:5000/api"
+const API_BASE_URL = "http://localhost:3000/api"
 
 export default function ProductGrid() {
   const [products, setProducts] = useState([])
