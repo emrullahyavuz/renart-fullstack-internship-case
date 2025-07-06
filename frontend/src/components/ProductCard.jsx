@@ -20,13 +20,18 @@ export default function ProductCard({ product }) {
   ]
 
   const images = Object.values(product.images)
+  const colorKeys = Object.keys(product.images)
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length)
+    const newIndex = (currentImageIndex - 1 + images.length) % images.length
+    setCurrentImageIndex(newIndex)
+    setSelectedColor(colorKeys[newIndex])
   }
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
+    const newIndex = (currentImageIndex + 1) % images.length
+    setCurrentImageIndex(newIndex)
+    setSelectedColor(colorKeys[newIndex])
   }
 
   // Touch/Swipe handlers for mobile
@@ -128,11 +133,11 @@ export default function ProductCard({ product }) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 h-full flex flex-col">
       {/* Image Carousel */}
       <div 
         ref={carouselRef}
-        className="relative aspect-square bg-gray-50 cursor-grab active:cursor-grabbing"
+        className="relative aspect-square bg-gray-50 cursor-grab active:cursor-grabbing flex-shrink-0"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -142,7 +147,7 @@ export default function ProductCard({ product }) {
         onMouseLeave={handleMouseUp}
       >
         <img
-          src={product.images[selectedColor] || "/placeholder.svg"}
+          src={images[currentImageIndex] || "/placeholder.svg"}
           alt={product.name}
           className="w-full h-full object-cover select-none"
           draggable={false}
@@ -173,7 +178,10 @@ export default function ProductCard({ product }) {
           {images.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentImageIndex(index)}
+              onClick={() => {
+                setCurrentImageIndex(index)
+                setSelectedColor(colorKeys[index])
+              }}
               className={`w-2 h-2 rounded-full transition-colors ${
                 index === currentImageIndex ? "bg-white" : "bg-white/50"
               }`}
@@ -184,17 +192,17 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Product Info */}
-      <div className="p-4">
-        <h3 className="font-light text-lg text-gray-800 mb-2" style={{ fontFamily: "Avenir, sans-serif" }}>
+      <div className="p-4 flex-1 flex flex-col">
+        <h3 className="font-light text-lg text-gray-800 mb-2 line-clamp-2" style={{ fontFamily: "Avenir, sans-serif" }}>
           {product.name}
         </h3>
 
-        <div className="text-2xl font-medium text-gray-900 mb-3" style={{ fontFamily: "Avenir, sans-serif" }}>
+        <div className="text-2xl font-medium text-gray-900 mb-3 flex-shrink-0" style={{ fontFamily: "Avenir, sans-serif" }}>
           ${product.price.toFixed(2)} USD
         </div>
 
         {/* Color Picker */}
-        <div className="mb-3">
+        <div className="mb-3 flex-shrink-0">
           <div className="text-sm text-gray-600 mb-2" style={{ fontFamily: "Montserrat, sans-serif" }}>
             {colors.find((c) => c.key === selectedColor)?.name}
           </div>
@@ -202,7 +210,13 @@ export default function ProductCard({ product }) {
             {colors.map((color) => (
               <button
                 key={color.key}
-                onClick={() => setSelectedColor(color.key)}
+                onClick={() => {
+                  setSelectedColor(color.key)
+                  const colorIndex = colorKeys.indexOf(color.key)
+                  if (colorIndex !== -1) {
+                    setCurrentImageIndex(colorIndex)
+                  }
+                }}
                 className={`w-6 h-6 rounded-full border-2 transition-all ${
                   selectedColor === color.key ? "border-gray-800 scale-110" : "border-gray-300 hover:border-gray-400"
                 }`}
@@ -215,7 +229,7 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Star Rating */}
-        <div className="flex items-center">{renderStars(starRating)}</div>
+        <div className="flex items-center mt-auto flex-shrink-0">{renderStars(starRating)}</div>
       </div>
     </div>
   )

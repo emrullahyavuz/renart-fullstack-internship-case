@@ -2,6 +2,11 @@ import { useState, useEffect } from "react"
 import ProductCard from "./ProductCard"
 import ProductGridSkeleton from "./UI/ProductGridSkeleton"
 import ProductFilter from "./ProductFilter"
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 
 const API_BASE_URL = "http://localhost:3000/api"
 
@@ -154,7 +159,7 @@ export default function ProductGrid() {
         </div>
       )}
       
-      {/* Products Grid */}
+      {/* Products Carousel */}
       {products.length === 0 && !filterLoading ? (
         <div className="text-center py-12">
           <p className="text-gray-500">No products match your filters</p>
@@ -166,10 +171,60 @@ export default function ProductGrid() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        <div className="relative">
+          <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={24}
+            slidesPerView={1}
+            navigation={{
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            }}
+            pagination={{
+              clickable: true,
+              el: '.swiper-pagination',
+            }}
+            breakpoints={{
+              640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 24,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 24,
+              },
+              1280: {
+                slidesPerView: 5,
+                spaceBetween: 24,
+              },
+            }}
+            className="product-swiper"
+          >
+            {products.map((product) => (
+              <SwiperSlide key={product.id}>
+                <ProductCard product={product} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          
+          {/* Custom Navigation Buttons */}
+          <div className="swiper-button-prev !text-gray-600 !bg-white !w-10 !h-10 !rounded-full !shadow-lg hover:!bg-gray-50 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </div>
+          <div className="swiper-button-next !text-gray-600 !bg-white !w-10 !h-10 !rounded-full !shadow-lg hover:!bg-gray-50 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+          
+          {/* Pagination */}
+          <div className="swiper-pagination !bottom-0 !mt-4"></div>
         </div>
       )}
     </div>
