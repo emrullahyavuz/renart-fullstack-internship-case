@@ -114,20 +114,20 @@ export default function ProductCard({ product }) {
     return (
       <div className="flex items-center gap-1">
         {[...Array(fullStars)].map((_, i) => (
-          <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+          <Star key={i} className="w-4 h-4" style={{ fill: "#E6CA97", color: "#E6CA97" }} />
         ))}
         {hasHalfStar && (
           <div className="relative">
             <Star className="w-4 h-4 text-gray-300" />
             <div className="absolute inset-0 overflow-hidden w-1/2">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              <Star className="w-4 h-4" style={{ fill: "#E6CA97", color: "#E6CA97" }} />
             </div>
           </div>
         )}
         {[...Array(emptyStars)].map((_, i) => (
           <Star key={i} className="w-4 h-4 text-gray-300" />
         ))}
-        <span className="ml-2 text-sm text-gray-600 font-medium">{rating.toFixed(1)}/5</span>
+        <span className="ml-2 text-gray-600" style={{ fontFamily: "Avenir, sans-serif", fontSize: "14px" }}>{rating.toFixed(1)}/5</span>
       </div>
     )
   }
@@ -173,37 +173,21 @@ export default function ProductCard({ product }) {
           </>
         )}
 
-        {/* Image Indicators */}
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                setCurrentImageIndex(index)
-                setSelectedColor(colorKeys[index])
-              }}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                index === currentImageIndex ? "bg-white" : "bg-white/50"
-              }`}
-              aria-label={`Go to image ${index + 1}`}
-            />
-          ))}
-        </div>
       </div>
 
       {/* Product Info */}
       <div className="p-4 flex-1 flex flex-col">
-        <h3 className="font-light text-lg text-gray-800 mb-2 line-clamp-2" style={{ fontFamily: "Avenir, sans-serif" }}>
+        <h3 className="font-medium text-gray-800 mb-2 line-clamp-2" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "15px" }}>
           {product.name}
         </h3>
 
-        <div className="text-2xl font-medium text-gray-900 mb-3 flex-shrink-0" style={{ fontFamily: "Avenir, sans-serif" }}>
+        <div className="text-gray-900 mb-3 flex-shrink-0" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "15px" }}>
           ${product.price.toFixed(2)} USD
         </div>
 
         {/* Color Picker */}
         <div className="mb-3 flex-shrink-0">
-          <div className="text-sm text-gray-600 mb-2" style={{ fontFamily: "Montserrat, sans-serif" }}>
+          <div className="text-gray-600 mb-2" style={{ fontFamily: "Avenir, sans-serif", fontSize: "12px" }}>
             {colors.find((c) => c.key === selectedColor)?.name}
           </div>
           <div className="flex gap-2">
@@ -217,13 +201,19 @@ export default function ProductCard({ product }) {
                     setCurrentImageIndex(colorIndex)
                   }
                 }}
-                className={`w-6 h-6 rounded-full border-2 transition-all ${
-                  selectedColor === color.key ? "border-gray-800 scale-110" : "border-gray-300 hover:border-gray-400"
-                }`}
-                style={{ backgroundColor: color.color }}
+                className="relative flex items-center justify-center w-8 h-8 focus:outline-none"
+                style={{ background: "none", border: "none", boxShadow: "none" }}
                 title={color.name}
                 aria-label={`Select ${color.name}`}
-              />
+              >
+                {selectedColor === color.key ? (
+                  <span className="flex items-center justify-center w-[30px] h-[30px] rounded-full border border-black p-0 m-0">
+                    <span style={{ backgroundColor: color.color }} className="inline-block w-6 h-6 rounded-full p-0 m-0"></span>
+                  </span>
+                ) : (
+                  <span style={{ backgroundColor: color.color }} className="inline-block w-6 h-6 rounded-full p-0 m-0"></span>
+                )}
+              </button>
             ))}
           </div>
         </div>

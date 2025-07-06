@@ -7,8 +7,10 @@ import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
-const API_BASE_URL = "http://localhost:3000/api"
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function ProductGrid() {
   const [products, setProducts] = useState([])
