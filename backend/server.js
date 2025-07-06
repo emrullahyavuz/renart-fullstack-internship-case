@@ -11,7 +11,7 @@ const swaggerSpec = require("./src/config/swagger.config");
 
 // Middleware setup
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors({origin: '*',}));
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;

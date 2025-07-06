@@ -27,22 +27,24 @@ export default function ProductFilter({ onFilterChange, filters, onClearFilters,
         <button
           onClick={() => setIsOpen(!isOpen)}
           disabled={isLoading}
-          className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-4 py-2 bg-[#F9F6F2] border border-[#F6E7C1] rounded-xl shadow-sm hover:bg-[#F6E7C1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 500 }}
         >
-          <Filter className="w-4 h-4" />
+          <Filter className="w-4 h-4 text-[#C2A76F]" />
           <span>Filters</span>
           {hasActiveFilters && (
-            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <div className="w-2 h-2 bg-[#C2A76F] rounded-full"></div>
           )}
           {isLoading && (
-            <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-4 h-4 border-2 border-[#C2A76F] border-t-transparent rounded-full animate-spin"></div>
           )}
         </button>
         
         {hasActiveFilters && (
           <button
             onClick={handleClearFilters}
-            className="flex items-center gap-1 px-3 py-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+            className="flex items-center gap-1 px-3 py-1 text-sm text-[#C2A76F] hover:text-[#A68A54] transition-colors bg-[#F6E7C1] rounded-lg shadow-sm"
+            style={{ fontFamily: 'Montserrat, sans-serif' }}
           >
             <X className="w-3 h-3" />
             Clear all
@@ -52,11 +54,11 @@ export default function ProductFilter({ onFilterChange, filters, onClearFilters,
 
       {/* Filter Panel */}
       {isOpen && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <div className="bg-[#F9F6F2] border border-[#F6E7C1] rounded-2xl p-6 shadow-md">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Price Range */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#C2A76F] mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                 Price Range (USD)
               </label>
               <div className="space-y-2">
@@ -65,21 +67,23 @@ export default function ProductFilter({ onFilterChange, filters, onClearFilters,
                   placeholder="Min price"
                   value={localFilters.minPrice || ""}
                   onChange={(e) => handleFilterChange("minPrice", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#F6E7C1] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C2A76F] focus:border-transparent bg-white placeholder:text-[#C2A76F]"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
                 />
                 <input
                   type="number"
                   placeholder="Max price"
                   value={localFilters.maxPrice || ""}
                   onChange={(e) => handleFilterChange("maxPrice", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#F6E7C1] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C2A76F] focus:border-transparent bg-white placeholder:text-[#C2A76F]"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
                 />
               </div>
             </div>
 
             {/* Popularity Score */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#C2A76F] mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                 Popularity Score
               </label>
               <div className="space-y-2">
@@ -91,7 +95,8 @@ export default function ProductFilter({ onFilterChange, filters, onClearFilters,
                   placeholder="Min popularity"
                   value={localFilters.minPopularity || ""}
                   onChange={(e) => handleFilterChange("minPopularity", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#F6E7C1] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C2A76F] focus:border-transparent bg-white placeholder:text-[#C2A76F]"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
                 />
                 <input
                   type="number"
@@ -101,14 +106,15 @@ export default function ProductFilter({ onFilterChange, filters, onClearFilters,
                   placeholder="Max popularity"
                   value={localFilters.maxPopularity || ""}
                   onChange={(e) => handleFilterChange("maxPopularity", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#F6E7C1] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C2A76F] focus:border-transparent bg-white placeholder:text-[#C2A76F]"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
                 />
               </div>
             </div>
 
             {/* Weight Range */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#C2A76F] mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                 Weight (grams)
               </label>
               <div className="space-y-2">
@@ -118,7 +124,8 @@ export default function ProductFilter({ onFilterChange, filters, onClearFilters,
                   placeholder="Min weight"
                   value={localFilters.minWeight || ""}
                   onChange={(e) => handleFilterChange("minWeight", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#F6E7C1] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C2A76F] focus:border-transparent bg-white placeholder:text-[#C2A76F]"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
                 />
                 <input
                   type="number"
@@ -126,20 +133,22 @@ export default function ProductFilter({ onFilterChange, filters, onClearFilters,
                   placeholder="Max weight"
                   value={localFilters.maxWeight || ""}
                   onChange={(e) => handleFilterChange("maxWeight", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#F6E7C1] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C2A76F] focus:border-transparent bg-white placeholder:text-[#C2A76F]"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
                 />
               </div>
             </div>
 
             {/* Sort Options */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#C2A76F] mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                 Sort By
               </label>
               <select
                 value={localFilters.sortBy || ""}
                 onChange={(e) => handleFilterChange("sortBy", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-[#F6E7C1] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C2A76F] focus:border-transparent bg-white text-[#C2A76F]"
+                style={{ fontFamily: 'Montserrat, sans-serif' }}
               >
                 <option value="">Default</option>
                 <option value="price-asc">Price: Low to High</option>
@@ -154,7 +163,7 @@ export default function ProductFilter({ onFilterChange, filters, onClearFilters,
 
           {/* Active Filters Display */}
           {hasActiveFilters && (
-            <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="mt-4 pt-4 border-t border-[#F6E7C1]">
               <div className="flex flex-wrap gap-2">
                 {Object.entries(filters).map(([key, value]) => {
                   if (!value || value === "") return null
@@ -189,12 +198,13 @@ export default function ProductFilter({ onFilterChange, filters, onClearFilters,
                   return (
                     <span
                       key={key}
-                      className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                      className="inline-flex items-center gap-1 px-2 py-1 bg-[#F6E7C1] text-[#A68A54] text-sm rounded-full border border-[#C2A76F] shadow-sm"
+                      style={{ fontFamily: 'Montserrat, sans-serif' }}
                     >
                       {label}
                       <button
                         onClick={() => handleFilterChange(key, "")}
-                        className="hover:bg-blue-200 rounded-full p-0.5"
+                        className="hover:bg-[#F9F6F2] rounded-full p-0.5"
                       >
                         <X className="w-3 h-3" />
                       </button>
