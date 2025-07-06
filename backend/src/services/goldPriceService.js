@@ -14,7 +14,7 @@ async function fetchGoldPrice() {
     // Using a free gold price API
     const response = await axios.get('https://www.goldapi.io/api/XAU/USD', {
       headers: {
-        'x-access-token': 'goldapi-1nme1vsmcr9878b-io',
+        'x-access-token': process.env.GOLD_API_KEY,
         'Content-Type': 'application/json'
       }
     });
