@@ -7,19 +7,29 @@ const API_BASE_URL = "http://localhost:3000/api"
 
 export default function ProductGrid() {
   const [products, setProducts] = useState([])
-  const [filteredProducts, setFilteredProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [filterLoading, setFilterLoading] = useState(false)
   const [error, setError] = useState(null)
   const [goldPrice, setGoldPrice] = useState(65.5)
   const [filters, setFilters] = useState({})
+  const [appliedFilters, setAppliedFilters] = useState({})
 
   useEffect(() => {
     fetchProducts()
   }, [])
 
   useEffect(() => {
-    applyFilters()
-  }, [products, filters])
+    // Debounce filter requests to avoid too many API calls
+    const timeoutId = setTimeout(() => {
+      if (Object.keys(filters).length > 0 && Object.values(filters).some(v => v !== "" && v !== null && v !== undefined)) {
+        fetchFilteredProducts()
+      } else {
+        fetchProducts()
+      }
+    }, 500)
+
+    return () => clearTimeout(timeoutId)
+  }, [filters])
 
   const fetchProducts = async () => {
     try {
@@ -31,12 +41,10 @@ export default function ProductGrid() {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       
-      
       const data = await response.json()
-
-      console.log("data", data)
       setProducts(data.products || [])
       setGoldPrice(data.goldPrice || 65.5)
+      setAppliedFilters({})
     } catch (error) {
       console.error("Error fetching products:", error)
       setError("Failed to load products. Please try again later.")
@@ -45,65 +53,40 @@ export default function ProductGrid() {
     }
   }
 
-  const applyFilters = () => {
-    let filtered = [...products]
-
-    // Apply price filters
-    if (filters.minPrice) {
-      filtered = filtered.filter(product => product.price >= parseFloat(filters.minPrice))
-    }
-    if (filters.maxPrice) {
-      filtered = filtered.filter(product => product.price <= parseFloat(filters.maxPrice))
-    }
-
-    // Apply popularity filters
-    if (filters.minPopularity) {
-      filtered = filtered.filter(product => product.popularityScore >= parseFloat(filters.minPopularity))
-    }
-    if (filters.maxPopularity) {
-      filtered = filtered.filter(product => product.popularityScore <= parseFloat(filters.maxPopularity))
-    }
-
-    // Apply weight filters
-    if (filters.minWeight) {
-      filtered = filtered.filter(product => product.weight >= parseFloat(filters.minWeight))
-    }
-    if (filters.maxWeight) {
-      filtered = filtered.filter(product => product.weight <= parseFloat(filters.maxWeight))
-    }
-
-    // Apply sorting
-    if (filters.sortBy) {
-      const [field, direction] = filters.sortBy.split('-')
-      filtered.sort((a, b) => {
-        let aValue, bValue
-        
-        switch (field) {
-          case 'price':
-            aValue = a.price
-            bValue = b.price
-            break
-          case 'popularity':
-            aValue = a.popularityScore
-            bValue = b.popularityScore
-            break
-          case 'weight':
-            aValue = a.weight
-            bValue = b.weight
-            break
-          default:
-            return 0
-        }
-        
-        if (direction === 'asc') {
-          return aValue - bValue
-        } else {
-          return bValue - aValue
+  const fetchFilteredProducts = async () => {
+    try {
+      setFilterLoading(true)
+      setError(null)
+      
+      // Build query string from filters
+      const queryParams = new URLSearchParams()
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value && value !== "" && value !== null && value !== undefined) {
+          queryParams.append(key, value)
         }
       })
+      
+      const response = await fetch(`${API_BASE_URL}/products/filter?${queryParams.toString()}`)
+      if (!response.ok) {
+        if (response.status === 400) {
+          const errorData = await response.json()
+          throw new Error(errorData.error || 'Invalid filter parameters')
+        }
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      setProducts(data.products || [])
+      setGoldPrice(data.goldPrice || 65.5)
+      setAppliedFilters(data.filters || {})
+    } catch (error) {
+      console.error("Error filtering products:", error)
+      setError(error.message || "Failed to filter products. Please try again later.")
+      // Fallback to showing all products on filter error
+      fetchProducts()
+    } finally {
+      setFilterLoading(false)
     }
-
-    setFilteredProducts(filtered)
   }
 
   const handleFilterChange = (newFilters) => {
@@ -112,6 +95,7 @@ export default function ProductGrid() {
 
   const handleClearFilters = () => {
     setFilters({})
+    fetchProducts()
   }
 
   if (loading) {
@@ -147,15 +131,31 @@ export default function ProductGrid() {
         onFilterChange={handleFilterChange}
         filters={filters}
         onClearFilters={handleClearFilters}
+        isLoading={filterLoading}
       />
       
       {/* Results Count */}
       <div className="text-sm text-gray-600">
-        Showing {filteredProducts.length} of {products.length} products
+        Showing {products.length} products
+        {Object.keys(appliedFilters).length > 0 && (
+          <span className="ml-2 text-blue-600">
+            (filtered results)
+          </span>
+        )}
       </div>
       
+      {/* Loading indicator for filters */}
+      {filterLoading && (
+        <div className="text-center py-4">
+          <div className="inline-flex items-center gap-2 text-blue-600">
+            <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <span>Applying filters...</span>
+          </div>
+        </div>
+      )}
+      
       {/* Products Grid */}
-      {filteredProducts.length === 0 ? (
+      {products.length === 0 && !filterLoading ? (
         <div className="text-center py-12">
           <p className="text-gray-500">No products match your filters</p>
           <button
@@ -167,7 +167,7 @@ export default function ProductGrid() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filteredProducts.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
