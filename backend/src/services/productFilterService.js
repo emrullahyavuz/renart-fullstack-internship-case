@@ -20,7 +20,7 @@ async function fetchGoldPrice() {
     });
     
     if (response.data.currency && response.data.price_gram_24k > 0) {
-      const goldData = response.price_gram_24k;
+      const goldData = response.data.price_gram_24k;
       return goldData || 65.5; // Fallback to default if no price
     }
     
@@ -47,7 +47,85 @@ async function getGoldPrice() {
   return goldPriceCache.price;
 }
 
+// Function to filter products based on criteria
+function filterProducts(products, filters, goldPrice) {
+  let filteredProducts = [...products];
+
+  // Apply price filters
+  if (filters.minPrice !== undefined) {
+    filteredProducts = filteredProducts.filter(product => 
+      product.price >= filters.minPrice
+    );
+  }
+
+  if (filters.maxPrice !== undefined) {
+    filteredProducts = filteredProducts.filter(product => 
+      product.price <= filters.maxPrice
+    );
+  }
+
+  // Apply popularity filters
+  if (filters.minPopularity !== undefined) {
+    filteredProducts = filteredProducts.filter(product => 
+      product.popularityScore >= filters.minPopularity
+    );
+  }
+
+  if (filters.maxPopularity !== undefined) {
+    filteredProducts = filteredProducts.filter(product => 
+      product.popularityScore <= filters.maxPopularity
+    );
+  }
+
+  // Apply weight filters
+  if (filters.minWeight !== undefined) {
+    filteredProducts = filteredProducts.filter(product => 
+      product.weight >= filters.minWeight
+    );
+  }
+
+  if (filters.maxWeight !== undefined) {
+    filteredProducts = filteredProducts.filter(product => 
+      product.weight <= filters.maxWeight
+    );
+  }
+
+  // Apply sorting
+  if (filters.sortBy) {
+    const [field, direction] = filters.sortBy.split('-');
+    filteredProducts.sort((a, b) => {
+      let aValue, bValue;
+      
+      switch (field) {
+        case 'price':
+          aValue = a.price;
+          bValue = b.price;
+          break;
+        case 'popularity':
+          aValue = a.popularityScore;
+          bValue = b.popularityScore;
+          break;
+        case 'weight':
+          aValue = a.weight;
+          bValue = b.weight;
+          break;
+        default:
+          return 0;
+      }
+      
+      if (direction === 'asc') {
+        return aValue - bValue;
+      } else {
+        return bValue - aValue;
+      }
+    });
+  }
+
+  return filteredProducts;
+}
+
 module.exports = {
   getGoldPrice,
-  fetchGoldPrice
+  fetchGoldPrice,
+  filterProducts
 }; 

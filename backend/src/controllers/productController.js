@@ -35,13 +35,16 @@ async function getFilteredProducts(req, res) {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const { minPrice, maxPrice, minPopularity, maxPopularity } = req.query;
+    const { minPrice, maxPrice, minPopularity, maxPopularity, minWeight, maxWeight, sortBy } = req.query;
 
     const filters = {};
     if (minPrice) filters.minPrice = parseFloat(minPrice);
     if (maxPrice) filters.maxPrice = parseFloat(maxPrice);
     if (minPopularity) filters.minPopularity = parseFloat(minPopularity);
     if (maxPopularity) filters.maxPopularity = parseFloat(maxPopularity);
+    if (minWeight) filters.minWeight = parseFloat(minWeight);
+    if (maxWeight) filters.maxWeight = parseFloat(maxWeight);
+    if (sortBy) filters.sortBy = sortBy;
 
     const products = await loadProducts();
     const goldPrice = await getGoldPrice();
