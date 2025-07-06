@@ -190,7 +190,7 @@ export default function ProductCard({ product }) {
         </h3>
 
         <div className="text-2xl font-medium text-gray-900 mb-3" style={{ fontFamily: "Avenir, sans-serif" }}>
-          ${product.price} USD
+          ${product.price.toFixed(2)} USD
         </div>
 
         {/* Color Picker */}

@@ -31,7 +31,10 @@ export default function ProductGrid() {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       
+      
       const data = await response.json()
+
+      console.log("data", data)
       setProducts(data.products || [])
       setGoldPrice(data.goldPrice || 65.5)
     } catch (error) {

@@ -1,4 +1,5 @@
 const axios = require('axios');
+require('dotenv').config();
 
 // Cache for gold price to avoid excessive API calls
 let goldPriceCache = {
@@ -11,11 +12,17 @@ let goldPriceCache = {
 async function fetchGoldPrice() {
   try {
     // Using a free gold price API
-    const response = await axios.get('https://api.metals.live/v1/spot/gold');
+    const response = await axios.get('https://www.goldapi.io/api/XAU/USD', {
+      headers: {
+        'x-access-token': 'goldapi-1nme1vsmcr9878b-io',
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log("response", response)
     
-    if (response.data && response.data.length > 0) {
-      const goldData = response.data[0];
-      return goldData.price || 65.5; // Fallback to default if no price
+    if (response.data.currency && response.data.price_gram_24k > 0) {
+      const goldData = response.data.price_gram_24k;
+      return goldData || 65.5; // Fallback to default if no price
     }
     
     return 65.5; // Fallback price
