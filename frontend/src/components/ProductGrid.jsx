@@ -26,6 +26,9 @@ export default function ProductGrid() {
   }, [])
 
   useEffect(() => {
+    // Skip the first render to avoid double API calls
+    if (Object.keys(filters).length === 0) return
+    
     // Debounce filter requests to avoid too many API calls
     const timeoutId = setTimeout(() => {
       if (Object.keys(filters).length > 0 && Object.values(filters).some(v => v !== "" && v !== null && v !== undefined)) {
