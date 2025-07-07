@@ -127,7 +127,7 @@ export default function ProductCard({ product }) {
         {[...Array(emptyStars)].map((_, i) => (
           <Star key={i} className="w-4 h-4 text-gray-300" />
         ))}
-        <span className="ml-2 text-gray-600" style={{ fontFamily: "Avenir, sans-serif", fontSize: "14px" }}>{rating.toFixed(1)}/5</span>
+        <span className="ml-2 font-avenir-book text-gray-600" style={{ fontSize: "14px" }}>{rating.toFixed(1)}/5</span>
       </div>
     )
   }
@@ -177,17 +177,17 @@ export default function ProductCard({ product }) {
 
       {/* Product Info */}
       <div className="p-4 flex-1 flex flex-col">
-        <h3 className="font-medium text-gray-800 mb-2 line-clamp-2" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "15px" }}>
+        <h3 className="font-montserrat-medium text-gray-800 mb-2 line-clamp-2" style={{ fontSize: "15px" }}>
           {product.name}
         </h3>
 
-        <div className="text-gray-900 mb-3 flex-shrink-0" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "15px" }}>
+        <div className="font-montserrat-regular text-gray-900 mb-3 flex-shrink-0" style={{ fontSize: "15px" }}>
           ${product.price.toFixed(2)} USD
         </div>
 
         {/* Color Picker */}
         <div className="mb-3 flex-shrink-0">
-          <div className="text-gray-600 mb-2" style={{ fontFamily: "Avenir, sans-serif", fontSize: "12px" }}>
+          <div className="font-avenir-book text-gray-600 mb-2" style={{ fontSize: "12px" }}>
             {colors.find((c) => c.key === selectedColor)?.name}
           </div>
           <div className="flex gap-2">
