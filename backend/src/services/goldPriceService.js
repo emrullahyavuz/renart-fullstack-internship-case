@@ -18,7 +18,7 @@ async function fetchGoldPrice() {
         'Content-Type': 'application/json'
       }
     });
-    console.log("response", response)
+    console.log("response", response.data.price_gram_24k)
     
     if (response.data.currency && response.data.price_gram_24k > 0) {
       const goldData = response.data.price_gram_24k;
